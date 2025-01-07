@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Translator App</title>
+    <link rel="stylesheet" href="\static\styles.css">
+</head>
+<body>
+  <div class="main-container">
+    
+    <div class="text-container">
+        <h1>English-to-French AI Translation App</h1>
+        <form id="translator-form">
+            <textarea id="input-text" placeholder="Enter text in English to translate..."></textarea>
+            <button type="submit">Translate</button>
+        </form>
+        <div id="output-container">
+                <h2>Translated Text in French:</h2>
+                <p id="translated-text"></p>
+        </div>
+    </div>
+
+    
+    <div class="image-container">
+        <div class="vertical-text">
+            <p>TRANSUTE</p>
+        </div>
+        <!-- <img src="\images\image.png" alt="Vertical Image"> -->
+        <img src="{{ url_for('static', filename='images/image.png') }}" alt="Vertical Image">
+
+    </div>
+
+
+   </div>
+
+
+    <script>
+        const form = document.getElementById("translator-form");
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            const inputText = document.getElementById("input-text").value;
+
+            try {
+                const response = await fetch('/translate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ input_text: inputText})
+                });
+                const data = await response.json();
+                document.getElementById("translated-text").textContent = data.translated_text || "Error translating text.";
+            } catch (error) {
+                document.getElementById("translated-text").textContent = "An error occurred.";
+            }
+        });
+    </script>
+</body>
+</html>

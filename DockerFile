@@ -1,0 +1,18 @@
+FROM python:3.11
+
+# Create the working directory
+RUN set -ex && mkdir /translator 
+WORKDIR /translator
+
+# Install Python dependencies
+COPY requirements.txt ./requirements.txt
+RUN pip install -r requirements.txt
+
+# Copy the relevant directories
+COPY . ./
+
+# Run the web server
+# default port for Flask app is 8000
+EXPOSE 8000 
+ENV PYTHONPATH /translator 
+CMD ["gunicorn", "-b", "0.0.0.0:8000", "app:app"]
